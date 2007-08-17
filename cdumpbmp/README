@@ -1,0 +1,10 @@
+cdumpbmp - Dump C code for BMP files
+
+This is a simple tool to dump graphical BMP files as C arrays, ready for use
+in C code.
+
+It's being developed in python as a matter of training, not feasibility
+neither efficiency.
+
+(C) Milton Soares Filho <milton.soares.filho at gmail.com>
+Licensed as GPL v2.0
