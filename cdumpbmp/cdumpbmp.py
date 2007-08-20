@@ -17,6 +17,7 @@
 # 00000030  00 00 02 00 00 00 00 00  00 00 ff ff ff 00 ff ff |................|
 
 import sys
+import struct
 
 class lineout:
 	def __init__(self, maxcols=16):
@@ -24,22 +25,22 @@ class lineout:
 		self.curcols = 0
 
 	def dumpheader(self, name, size, w, h):
-		print "/* width=%d height=%d */\n" % (w, h)
-		print "char bmp", name, "[", size, "] = {\n\t"
+		print "/* width=%d" % w, "height=%d */" % h
+		print "char bmp", name, "[", size, "] = {\n\t", 
 
-	def dumpfooter():
-		print "};\n"
+	def dumpfooter(self):
+		print "\n};"
 
 	def dumpbyte(self, b):
 		"""Dumps each hexadecimal byte on output"""
 		if self.curcols != 0:
-			print ", "
+			print ", ", 
 
 		if self.curcols == self.maxcols:
-			print "\n\t"
+			print "\n\t", 
 			self.curcols = 0
 
-		print "0x%02X" % int(b)
+		print "0x%02X" % b, 
 
 def main(filename):
 	f = open(filename, 'r')
@@ -47,13 +48,17 @@ def main(filename):
 	if header <> 'BM':
 		print "This doesn't seem a BMP file"
 		sys.exit(0)
-	size = f.read(4)
+	b = f.read(4)
+	size = struct.unpack("<i", b)[0]
 	f.read(4)
-	offset = f.read(4)
+	b = f.read(4)
+	offset = struct.unpack("<i", b)[0]
 	f.read(4)
-	height = f.read(4)
-	width = f.read(4)
-	print filename, offset, size, width, height
+	b = f.read(4)
+	height = struct.unpack("<i", b)[0]
+	b = f.read(4)
+	width = struct.unpack("<i", b)[0]
+	#print filename, offset, size, width, height
 
 	dumper = lineout()
 	dumper.dumpheader(filename, size, width, height)
@@ -66,5 +71,15 @@ def main(filename):
 		b = f.read(1)
 	dumper.dumpfooter()
 
+def help():
+	print "cdumpbmp 1.0 ( http://code.google.com/p/cdumpbmp )"
+	print "Usage: cdumpbpm [filename]\n"
+	print "EXAMPLE:"
+	print "  cdumpbmp foobar.bmp\n"
+
 if __name__ == '__main__':
 	main(sys.argv[1])
+	try:
+		main(sys.argv[1])
+	except IndexError:
+		help()
