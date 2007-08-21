@@ -16,6 +16,7 @@
 # 00000020  00 00 74 01 00 00 b8 0b  00 00 b8 0b 00 00 02 00 |..t.............|
 # 00000030  00 00 02 00 00 00 00 00  00 00 ff ff ff 00 ff ff |................|
 
+import os
 import sys
 import struct
 
@@ -66,7 +67,9 @@ def main(filename):
 	#print filename, offset, size, width, height
 
 	dumper = lineout()
-	dumper.dumpheader("image", size, width, height)
+	name = os.path.basename(filename)
+	name = name.rsplit(".", 2)[0]
+	dumper.dumpheader(name, size, width, height)
 
 	# start bitmap area
 	f.seek(offset, 0)
