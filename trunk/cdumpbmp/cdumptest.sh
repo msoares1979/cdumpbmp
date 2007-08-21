@@ -22,7 +22,7 @@ echo -e $ZEROLEN | xxd -r - data/zerolen.bmp
 OUTPUT=$(python cdumpbmp.py data/zerolen.bmp)
 rm -f data/zerolen.bmp
 EXPECTED="/* width=0 height=0 */
-char bmpimage[0] = {
+char bmpzerolen[0] = {
 };"
 if [ "$OUTPUT" = "$EXPECTED" ]; then
 	echo "success"
