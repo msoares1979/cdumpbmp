@@ -26,21 +26,26 @@ class lineout:
 
 	def dumpheader(self, name, size, w, h):
 		print "/* width=%d" % w, "height=%d */" % h
-		print "char bmp", name, "[", size, "] = {\n\t", 
+		print "char bmp%s[%d] = {\n" % (name, size), 
 
 	def dumpfooter(self):
-		print "\n};"
+		if self.curcols <> 0:
+			print "\n",
+		print "};"
 
 	def dumpbyte(self, b):
 		"""Dumps each hexadecimal byte on output"""
-		if self.curcols != 0:
-			print ", ", 
-
 		if self.curcols == self.maxcols:
-			print "\n\t", 
+			print "\n", 
 			self.curcols = 0
 
+		if self.curcols == 0:
+			print "\t",
+		else:
+			print ", ",
+
 		print "0x%02X" % b, 
+		self.curcols += 1
 
 def main(filename):
 	f = open(filename, 'r')
@@ -61,7 +66,7 @@ def main(filename):
 	#print filename, offset, size, width, height
 
 	dumper = lineout()
-	dumper.dumpheader(filename, size, width, height)
+	dumper.dumpheader("image", size, width, height)
 
 	# start bitmap area
 	f.seek(offset, 0)
@@ -78,7 +83,6 @@ def help():
 	print "  cdumpbmp foobar.bmp\n"
 
 if __name__ == '__main__':
-	main(sys.argv[1])
 	try:
 		main(sys.argv[1])
 	except IndexError:
