@@ -1,0 +1,2 @@
+* use pyunit (http://docs.python.org/lib/module-unittest.html)
+* make the way back (from array to file)
