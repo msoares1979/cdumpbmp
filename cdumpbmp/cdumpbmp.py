@@ -20,6 +20,10 @@ import os
 import sys
 import struct
 
+class CDumpBmpInputError(Exception):
+	def __init__(self):
+		Exception.__init__()
+
 class lineout:
 	def __init__(self, maxcols=16):
 		self.maxcols = maxcols
