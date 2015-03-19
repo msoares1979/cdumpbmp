@@ -1,0 +1,1 @@
+A simple tool to dump graphical BMP files as C arrays, ready for use in C code.
